@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxf.server.mapper.AdminMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.zxf.server.entity.Admin">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="phone" property="phone" />
+        <result column="telephone" property="telephone" />
+        <result column="address" property="address" />
+        <result column="enabled" property="enabled" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="userFace" property="userFace" />
+        <result column="remark" property="remark" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, phone, telephone, address, enabled, username, password, userFace, remark
+    </sql>
+
+    <resultMap id="AdminWithRoles" type="Admin" extends="BaseResultMap">
+        <collection property="roles" ofType="Role">
+            <id column="id1" property="id"/>
+            <id column="name1" property="name"/>
+            <id column="nameZh1" property="nameZh"/>
+        </collection>
+    </resultMap>
+
+    <select id="getAdminWithRolesByUsername" resultMap="AdminWithRoles">
+        select t1.*,
+               t3.id as id1,
+               t3.`name` as name1,
+               t3.`nameZh` as nameZh1
+        from
+            t_admin t1,
+            t_admin_role t2,
+            t_role t3
+        where
+            t1.`id`=t2.`adminId`
+          and
+            t2.`rid`=t3.`id`
+          and
+            t1.username=#{username}
+    </select>
+
+    <select id="getAllAdminsWithRoles" resultMap="AdminWithRoles">
+        select
+            m1.*,
+            m2.`id` as id2,
+            m2.`adminId` as admin2,
+            m2.`rid` as rid2
+        from
+            t_admin m1,
+            t_admin_role m2,
+            t_role m3
+        where
+            m1.`id`=m2.`adminId`
+          and
+            m2.`rid`=m3.`id`
+          and
+            m1.id != 1
+    </select>
+
+</mapper>
