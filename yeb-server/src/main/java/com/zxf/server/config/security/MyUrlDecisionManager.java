@@ -14,6 +14,12 @@ import java.util.Collection;
 
 @Component
 public class MyUrlDecisionManager implements AccessDecisionManager {
+    /**
+     *
+     * @param authentication ---> 当前登录用户认证对象Authentication对象
+     * @param o --->
+     * @param collection ---> 访问当前资源所需权限
+     */
     @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
 
